@@ -93,7 +93,7 @@ def mainPage() {
 			input "message","text",title:"Play this message", required:false, multiple: false
 		}
 		section {
-			input "sonos", "capability.musicPlayer", title: "On this Speaker player", required: true, multiple: true
+			input "sonos", "capability.musicPlayer", title: "On this Speaker player", required: true
 		}
 		section("More options", hideable: true, hidden: true) {
 			input "resumePlaying", "bool", title: "Resume currently playing music after notification", required: false, defaultValue: true
@@ -286,6 +286,7 @@ private takeAction(evt) {
 	else {
 		sonos.playTrackAndRestore(state.sound.uri, state.sound.duration, volume)
 	}
+    loadText()
 
 	if (frequency || oncePerDay) {
 		state[frequencyKey(evt)] = now()
@@ -410,8 +411,8 @@ private loadText() {
 			state.sound = [uri: "http://s3.amazonaws.com/smartapp-media/sonos/lightsaber.mp3", duration: "10"]
 			break;
 		case "Seinfeld":
-			def rand = new Random().nextInt(31) + 1
-			state.sound = [uri: "http://10.0.1.1:8080/seinfeld/"+rand+".mp3", duration: "14"]
+			def rand = (String) (new Random().nextInt(31) + 1)
+			state.sound = [uri: "http://10.0.1.1:8080/seinfeld/"+rand.padLeft(2,"0")+".mp3", duration: "14"]
 			break;
 		case "Custom Message":
 			if (message) {
