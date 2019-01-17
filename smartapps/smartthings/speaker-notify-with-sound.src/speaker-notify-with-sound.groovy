@@ -16,7 +16,7 @@
  *  Date: 2014-1-29
  */
 definition(
-	name: "Speaker Notify with Sound",
+	name: "Speaker Notify with Sound - Multiple",
 	namespace: "smartthings",
 	author: "SmartThings",
 	description: "Play a sound or custom message through your Speaker when the mode changes or other events occur.",
@@ -88,11 +88,12 @@ def mainPage() {
 				"Smartthings detected smoke",
 				"Someone is arriving",
 				"Piano",
-				"Lightsaber"]
+				"Lightsaber",
+				"Seinfeld"]
 			input "message","text",title:"Play this message", required:false, multiple: false
 		}
 		section {
-			input "sonos", "capability.musicPlayer", title: "On this Speaker player", required: true
+			input "sonos", "capability.musicPlayer", title: "On this Speaker player", required: true, multiple: true
 		}
 		section("More options", hideable: true, hidden: true) {
 			input "resumePlaying", "bool", title: "Resume currently playing music after notification", required: false, defaultValue: true
@@ -407,6 +408,10 @@ private loadText() {
 			break;
 		case "Lightsaber":
 			state.sound = [uri: "http://s3.amazonaws.com/smartapp-media/sonos/lightsaber.mp3", duration: "10"]
+			break;
+		case "Seinfeld":
+			def rand = new Random().nextInt(31) + 1
+			state.sound = [uri: "http://10.0.1.1:8080/seinfeld/"+rand+".mp3", duration: "14"]
 			break;
 		case "Custom Message":
 			if (message) {
